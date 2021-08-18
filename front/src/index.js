@@ -1,3 +1,3 @@
-import {mountApp} from "./App"
+import {mountApp} from "./PSApp/PSApp"
 
 mountApp()
