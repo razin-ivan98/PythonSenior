@@ -56,8 +56,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(png|svg|jpg|gif)$/, ////удолить лишнее
-                use: ['file-loader']
+                test: /\.svg$/,
+                loader: 'file-loader',
             },
             {
                 test: /\.(ttf)$/,

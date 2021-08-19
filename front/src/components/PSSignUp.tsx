@@ -9,6 +9,7 @@ import { CLInput } from "../CLib/CLInput/CLInput"
 import { PSPageCantainer } from "./PSPageContainer"
 import { Link } from "react-router-dom"
 import { AppStore } from "../AppStore"
+import { PSLogo } from "./PSLogo"
 
 interface Props {
     store: AppStore
@@ -45,8 +46,9 @@ export class PSSignUp extends React.Component<Props, {}> {
         void this.props.store.signUp(this.login, this.passwd, this.repeatPasswd)
     }
 
-    render() {
+    render() {        
         return <PSPageCantainer>
+            <PSLogo />
             <CLCard width={400}>
                 <CLCardHeader>Регистрация</CLCardHeader>
                 <CLFlex direction="column">

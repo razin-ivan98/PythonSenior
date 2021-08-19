@@ -10,6 +10,7 @@ import { PSPageCantainer } from "./PSPageContainer"
 import { Link } from "react-router-dom"
 import { CLText } from "../CLib/CLText/CLText"
 import { AppStore } from "../AppStore"
+import { PSLogo } from "./PSLogo"
 
 interface Props {
     store: AppStore
@@ -33,8 +34,13 @@ export class PSSignIn extends React.Component<Props, {}> {
         this.passwd = passwd
     }
 
+    private submit() {
+        void this.props.store.signIn(this.login, this.passwd)
+    }
+
     render() {
         return <PSPageCantainer>
+            <PSLogo />
             <CLCard width={400}>
                 <CLCardHeader>Авторизуйтесь в системе</CLCardHeader>
                 <CLFlex direction="column">
@@ -51,7 +57,9 @@ export class PSSignIn extends React.Component<Props, {}> {
                         placeholder="Password"
                         value={this.passwd}
                     />
-                    <CLButton variant="success" size="medium">Sign In</CLButton>
+                    <CLButton variant="success" size="medium" onClick={this.submit}>
+                        Sign In
+                    </CLButton>
                     <Link to="/sign_up">
                         <CLButton width="full" variant="primary" size="medium">
                             Register
