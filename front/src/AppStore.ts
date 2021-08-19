@@ -1,15 +1,10 @@
 import { action, computed, observable } from "mobx";
-import { refStructEnhancer } from "mobx/dist/internal";
 import { User } from "./types";
 
 
 export class AppStore {
-    constructor() {
-        void this.getMe()
-    }
-
-    @observable
-    private $me: User = null
+    @observable.ref
+    private $me: User
     
     @action
     public setMe(me: User) {
@@ -17,21 +12,23 @@ export class AppStore {
     }
 
     public async getMe() {
-        const response = await fetch("http://0.0.0.0:5000/", {
+        const response = await fetch("/api/get_me", {
             method: "GET",
         })
         if (response.ok) {
             const json = await response.json();
+
             this.setMe(json)
+            console.log(this.me);
+            
         } else {
             const json = await response.json();
             alert("Ошибка HTTP: " + response.status);
-            console.log(json);
         }
     }
 
     public async signIn(login: string, passwd: string) {
-        const response = await fetch("http://0.0.0.0:5000/api/sign_in", {
+        const response = await fetch("/api/sign_in", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -41,6 +38,8 @@ export class AppStore {
         if (response.ok) {
             const json = await response.json();
             this.setMe(json)
+            console.log(this.me);
+
         } else {
             const json = await response.json();
             alert("Ошибка HTTP: " + response.status);
@@ -49,7 +48,7 @@ export class AppStore {
     }
 
     public async signUp(login: string, passwd: string, repeatPasswd: string) {
-        const response = await fetch("http://0.0.0.0:5000/api/sign_up", {
+        const response = await fetch("/api/sign_up", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

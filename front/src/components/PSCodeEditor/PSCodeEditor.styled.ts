@@ -32,3 +32,10 @@ export const LineNo = styled.span`
 export const LineContent = styled.span`
   display: table-cell;
 `;
+
+export const ButtonWrapper = styled.div`
+  width: fit-content;
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+`

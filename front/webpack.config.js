@@ -41,8 +41,10 @@ module.exports = {
     devServer: {
         port: 8040,
         hot: isDev,
-        historyApiFallback: true
-
+        historyApiFallback: true,
+        proxy: {
+            "/api": "http://0.0.0.0:5000"
+        }
     },
     plugins: [
         new HTMLWebpackPlugin({

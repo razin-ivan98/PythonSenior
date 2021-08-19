@@ -19,7 +19,6 @@ interface Props {
 @autobind
 @observer
 export class PSSignIn extends React.Component<Props, {}> {
-
     @observable
     private login: string
     @action

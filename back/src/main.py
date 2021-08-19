@@ -7,6 +7,8 @@ import json
 import hashlib
 from flask_cors import CORS
 
+from test import test
+
 app = Flask(__name__)
 app.config.from_object('config')
 
@@ -14,9 +16,8 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:secret@localhost/python_senior_db'
 db = SQLAlchemy(app)
 
-@app.route("/", methods=["GET"])
+@app.route("/api/get_me", methods=["GET"])
 def api_get_me():
-    print(session)
     if "user" in session:
         user = User.query.filter_by(name=session["user"]).first()
         return jsonify({
@@ -64,6 +65,7 @@ def api_sign_up():
 
 @app.route("/api/sign_in", methods=["POST"])
 def api_sign_in():
+
     data = request.get_json()
     login = data["login"]
     passwd = data["passwd"]
@@ -80,15 +82,25 @@ def api_sign_in():
         response["errors"] = ["Wrong password"]
         return jsonify(response), 401
 
-    session["user"] = "KEKE"
-    print(session)
-
+    session["user"] = user.name
 
     return jsonify({
         "name": user.name,
         "role": user.role,
         "id": user.id
     }), 200
+
+@app.route("/api/code", methods=["POST"])
+def code():
+    if not "user" in session:
+        return jsonify({"errors": ["Not authorized"]}), 401
+
+    data = request.get_json()
+    code = data["code"]
+
+    res = test(code)
+
+    return jsonify(res), 200
 
 
 class User(db.Model):

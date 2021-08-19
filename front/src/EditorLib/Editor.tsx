@@ -14,6 +14,7 @@ type Props = Partial<React.ReactElement<'div'>> & {
   ignoreTabKey: boolean,
   padding: number | string,
   style?: {},
+  errorStrings?: number[],
 
   // Props for the textarea
   textareaId?: string,
@@ -32,6 +33,7 @@ type Props = Partial<React.ReactElement<'div'>> & {
   onBlur?: React.FocusEventHandler<HTMLTextAreaElement>,
   onKeyUp?: React.KeyboardEventHandler<HTMLTextAreaElement>,
   onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement>,
+
 
   // Props for the hightlighted code’s pre element
   preClassName?: string,
@@ -537,6 +539,7 @@ export default class Editor extends React.Component<Props, State> {
       ignoreTabKey,
       /* eslint-enable no-unused-vars */
       preClassName,
+      errorStrings,
       ...rest
     } = this.props;
 

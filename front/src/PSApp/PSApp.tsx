@@ -21,18 +21,24 @@ export function mountApp() {
 @observer
 class PSApp extends React.Component<{}, {}> {
     private appStore = new AppStore
+
+    componentDidMount() {
+        this.appStore.getMe()
+    }
  
     render() {
+        console.log(this.appStore.me);
+        
         return <Router>
             <Switch>
                 <Route path="/sign_in">
-                    {this.appStore.me ? <Redirect to="./"/> : <PSSignIn store={this.appStore} />}
+                    {this.appStore.me ? <Redirect to="/"/> : <PSSignIn store={this.appStore} />}
                 </Route>
                 <Route path="/sign_up">
-                    {this.appStore.me ? <Redirect to="./"/> : <PSSignUp store={this.appStore} />}
+                    {this.appStore.me ? <Redirect to="/"/> : <PSSignUp store={this.appStore} />}
                 </Route>
                 <Route path="/">
-                    {this.appStore.me ? "Index" : <Redirect to="./sign_in"/>}
+                    {this.appStore.me ? <PSCodeEditor /> : <Redirect to="./sign_in"/>}
                 </Route>
                 <Route path="/not_approved">
                     Index
