@@ -14,6 +14,10 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:secret@localhost/python_senior_db'
 db = SQLAlchemy(app)
 
+@app.route("/api/create_all", methods=["GET"])
+def create_all():
+    db.create_all()
+
 @app.route("/api/get_me", methods=["GET"])
 def api_get_me():
     if "user" in session:
@@ -110,5 +114,5 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-app.run(debug=True, host="0.0.0.0")
+# app.run(debug=True, host="0.0.0.0")
     
