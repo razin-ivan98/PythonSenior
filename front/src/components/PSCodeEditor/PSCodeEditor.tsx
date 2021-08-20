@@ -6,10 +6,10 @@ import { observer } from "mobx-react";
 import { action, computed, observable } from "mobx";
 import { autobind } from "core-decorators";
 import { CLButton } from "../../CLib/CLButton/CLButton";
-import { ButtonWrapper, Wrapper, Line, LineNo, LineContent, Pre, ErrorWrapper } from "./PSCodeEditor.styled"
+import { Wrapper, Line, LineNo, LineContent, Pre, ErrorWrapper, MainContainer } from "./PSCodeEditor.styled"
 import { PSConsole } from "./PSConsole";
 
-interface Error {
+export interface Error {
     line: number
     text: string
 }
@@ -19,9 +19,19 @@ interface Error {
 export class PSCodeEditor extends React.Component {
 
     @observable
+    private showConsole: boolean = true
+    @action
+    private setShowConsole(value: boolean) {
+        this.showConsole = value
+    }
+    private switchShowConsole() {
+        this.setShowConsole(!this.showConsole)
+    }
+
+    @observable
     private code: string = `
 def kek(lol):
-    print(lol)
+  print(lol)
 
 kek()
 kek("LOL")
@@ -85,7 +95,11 @@ kek("LOL")
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <Pre>
                     {tokens.map((line, i) => (
-                        <Line key={i} errored={Boolean(this.error) && this.error.line === i + 1}>
+                        <Line
+                            key={i}
+                            errored={Boolean(this.error) && this.error.line === i + 1}
+                            isEmpty={line.length === 1 && line[0].empty}
+                        >
                             <LineNo>{i + 1}</LineNo>
                             <LineContent>
                                 {line.map((token, key) => <span key={key} {...getTokenProps({ token, key })} />)}
@@ -103,8 +117,8 @@ kek("LOL")
     )}
 
     render() {
-        return <>
-            <Wrapper>
+        return <MainContainer>
+            <Wrapper showConsole={this.showConsole}>
                 <Editor
                     insertSpaces
                     tabSize={2}
@@ -117,12 +131,15 @@ kek("LOL")
                     error={this.error}
                     // isErrorSwown={this.isErrorShown}
                 />
-                <ButtonWrapper>
-                    <CLButton variant="success" onClick={this.submitCode}>Выполнить</CLButton>
-                </ButtonWrapper>
             </Wrapper>
-            <PSConsole output={this.output} />
+            <PSConsole
+                output={this.output}
+                error={this.error}
+                submitCode={this.submitCode}
+                labelClick={this.switchShowConsole}
+                showConsole={this.showConsole}
+            />
             
-        </>
+        </MainContainer>
     }
 }

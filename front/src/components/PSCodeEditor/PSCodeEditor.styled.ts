@@ -1,19 +1,49 @@
 import { resetGlobalState } from "mobx/lib/internal";
 import styled from "styled-components";
 
-export const ConsoleWrapper = styled.div`
+interface ConsoleWrapperProps {
+  show?: boolean
+}
+
+export const MainContainer = styled.div`
+  overflow: hidden;
+  height: 100vh;
+`
+interface WrapperProps {
+  showConsole?: boolean
+}
+
+export const ConsoleWrapper = styled.div<ConsoleWrapperProps>`
   padding: 1em;
   height: 30vh;
-  background-color: #272822;
+  background-color: #1e1e1e;
   font-family: sans-serif;
+  overflow: visible;
+  border-top: 2px solid white;
+  position: relative;
+  /* transform: ${({show}) => show ? "unset" : "translateY(30vh)"}; */
+  /* transition: ease 0.3s transform; */
 `;
 
-export const Wrapper = styled.div`
+// export const ControlWrapper = styled.div`
+//   padding: 1em 1em 0 1em;
+//   height: 70px;
+//   background-color: #1e1e1e;
+//   font-family: sans-serif;
+//   position: relative;
+//   overflow: visible;
+//   border-top: 2px solid white;
+
+// `;
+
+export const Wrapper = styled.div<WrapperProps>`
   position: relative;
   box-sizing: border-box;
   background-color: #011627;
   padding-left: 30px;
   font-family: sans-serif;
+  height: ${({showConsole}) => showConsole ? "70vh" : "100vh"};
+  transition: ease 0.3s height;
 `;
 
 export const Pre = styled.div`
@@ -22,12 +52,14 @@ export const Pre = styled.div`
 
 interface LineProps {
   errored?: boolean;
+  isEmpty?: boolean;
 }
 
 export const Line = styled.div<LineProps>`
   background-color: ${({errored}) => errored ? "rgba(255, 0, 0, 0.4)" : "unset"};
   /* opacity: ${error => error ? "0.4" : "0"}; */
-  height: 18px;
+  min-height: 18px;
+  height: ${({isEmpty}) => isEmpty ? "18px" : "unset"};
   position: relative;
   overflow: visible;
 `;
@@ -65,9 +97,27 @@ export const ErrorWrapper = styled.div`
 export const LineContent = styled.div`
 `;
 
-export const ButtonWrapper = styled.div`
-  width: fit-content;
-  position: absolute;
-  bottom: 1em;
-  right: 1em;
+// export const ButtonWrapper = styled.div`
+//   width: fit-content;
+//   position: absolute;
+//   top: 1em;
+//   right: 1em;
+// `
+
+export const ConsoleErrorWrapper = styled.div`
+  background-color: rgb(120, 0 ,0);
+`
+
+
+export const ConsoleLabel = styled.div`
+    display: block;
+    border-radius: 5px 5px 0 0;
+    position: absolute;
+    background-color: #1e1e1e;
+    padding: 0.1em 0.8em;
+    color: white;
+    top: -1.54em;
+    left: 1em;
+    border: 2px solid;
+    border-color: white white transparent white;
 `
