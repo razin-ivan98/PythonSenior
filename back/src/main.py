@@ -1,13 +1,11 @@
-from logging import DEBUG
 from flask import Flask, request, jsonify, session
 import pymysql
 pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
 import json
 import hashlib
+import docker_interpretator
 from flask_cors import CORS
-
-from test import test
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -98,7 +96,7 @@ def code():
     data = request.get_json()
     code = data["code"]
 
-    res = test(code)
+    res = docker_interpretator.run(code)
 
     return jsonify(res), 200
 

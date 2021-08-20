@@ -14,7 +14,8 @@ type Props = Partial<React.ReactElement<'div'>> & {
   ignoreTabKey: boolean,
   padding: number | string,
   style?: {},
-  errorStrings?: number[],
+  error?: any,
+  // isErrorSwown?: any,
 
   // Props for the textarea
   textareaId?: string,
@@ -539,7 +540,8 @@ export default class Editor extends React.Component<Props, State> {
       ignoreTabKey,
       /* eslint-enable no-unused-vars */
       preClassName,
-      errorStrings,
+      error,
+      // isErrorSwown,
       ...rest
     } = this.props;
 
@@ -611,6 +613,7 @@ const styles = {
     overflow: 'hidden' as any,
   },
   textarea: {
+    outline: 'none' as any,
     position: 'absolute' as any,
     top: 0,
     left: 0,
@@ -618,7 +621,7 @@ const styles = {
     width: '100%' as any,
     resize: 'none' as any,
     color: 'inherit' as any,
-    overflow: 'hidden' as any,
+    overflow: 'visible' as any,
     MozOsxFontSmoothing: 'grayscale' as any,
     WebkitFontSmoothing: 'antialiased' as any,
     WebkitTextFillColor: 'transparent' as any,
@@ -626,6 +629,7 @@ const styles = {
   highlight: {
     position: 'relative' as any,
     pointerEvents: 'none' as any,
+    overflow: 'visible' as any,
   },
   editor: {
     margin: 0,

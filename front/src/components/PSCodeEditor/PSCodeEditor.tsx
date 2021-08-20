@@ -6,29 +6,43 @@ import { observer } from "mobx-react";
 import { action, computed, observable } from "mobx";
 import { autobind } from "core-decorators";
 import { CLButton } from "../../CLib/CLButton/CLButton";
-import { ButtonWrapper } from "./PSCodeEditor.styled"
+import { ButtonWrapper, Wrapper, Line, LineNo, LineContent, Pre, ErrorWrapper } from "./PSCodeEditor.styled"
+import { PSConsole } from "./PSConsole";
 
-
-const exampleCode = `
-def kek:
-  lol()
-`.trim();
+interface Error {
+    line: number
+    text: string
+}
 
 @observer
 @autobind
 export class PSCodeEditor extends React.Component {
+
     @observable
-    private code: string = ""
-    @action
+    private code: string = `
+def kek(lol):
+    print(lol)
+
+kek()
+kek("LOL")
+`
     private setCode(newCode: string) {
+        this.setError(null)
         this.code = newCode
     }
 
     @observable.ref
-    private errorStrings: number[] = []
+    private error: Error = null
     @action
-    private setErrorStrings(errorStrings: number[]) {
-        this.errorStrings = errorStrings
+    private setError(error: Error) {
+        this.error = error
+    }
+
+    @observable
+    private output: string = ""
+    @action
+    private setOutput(output: string) {
+        this.output = output
     }
 
     private styles: {root: React.CSSProperties} = {
@@ -37,9 +51,8 @@ export class PSCodeEditor extends React.Component {
             fontFamily: '"Dank Mono", "Fira Code", monospace',
             ...theme.plain,
             fontWeight: 100,
-            height: "100vh",
-            overflow: "auto",
-            width: "100vw"
+            minHeight: "70vh",
+            overflow: "visible"
         }
     }
 
@@ -53,10 +66,11 @@ export class PSCodeEditor extends React.Component {
         })
         if (response.ok) {
             const json = await response.json();
+            this.setOutput(json.output)
             if (json.status === "ERROR") {
-                this.setErrorStrings([json.error.line])
+                this.setError(json.error)
             } else {
-                this.setErrorStrings([])
+                this.setError(null)
             }
             console.log(json);
         } else {
@@ -68,37 +82,47 @@ export class PSCodeEditor extends React.Component {
     private highlight() {
         return (
         <Highlight {...defaultProps} theme={theme} code={this.code} language="python">
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <Fragment>
-              {tokens.map((line, i) => (
-                <div
-                    {...getLineProps({ line, key: i })}
-                    style={this.errorStrings.includes(i + 1) ? {backgroundColor: "red", opacity: "40%"} : {}}
-                >
-                    {line.map((token, key) => <span {...getTokenProps({ token, key })} />)}
-                </div>
-              ))}
-            </Fragment>
-          )}
+            {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                <Pre>
+                    {tokens.map((line, i) => (
+                        <Line key={i} errored={Boolean(this.error) && this.error.line === i + 1}>
+                            <LineNo>{i + 1}</LineNo>
+                            <LineContent>
+                                {line.map((token, key) => <span key={key} {...getTokenProps({ token, key })} />)}
+                            </LineContent>
+                            {this.error && this.error.line === i + 1 &&
+                                <ErrorWrapper>
+                                    {this.error.text}
+                                </ErrorWrapper>
+                                }
+                        </Line>
+                    ))}
+                </Pre>
+            )}
         </Highlight>
     )}
 
     render() {
         return <>
-            <Editor
-                insertSpaces
-                tabSize={2}
-                value={this.code}
-                onValueChange={this.setCode}
-                highlight={this.highlight}
-                padding={10}
-                style={this.styles.root}
-                //костыль чтоб обновлялось норм
-                errorStrings={this.errorStrings}
-            />
-            <ButtonWrapper>
-                <CLButton variant="success" onClick={this.submitCode}>Выполнить</CLButton>
-            </ButtonWrapper>
+            <Wrapper>
+                <Editor
+                    insertSpaces
+                    tabSize={2}
+                    value={this.code}
+                    onValueChange={this.setCode}
+                    highlight={this.highlight}
+                    padding={10}
+                    style={this.styles.root}
+                    //костыль чтоб обновлялось норм
+                    error={this.error}
+                    // isErrorSwown={this.isErrorShown}
+                />
+                <ButtonWrapper>
+                    <CLButton variant="success" onClick={this.submitCode}>Выполнить</CLButton>
+                </ButtonWrapper>
+            </Wrapper>
+            <PSConsole output={this.output} />
+            
         </>
     }
 }

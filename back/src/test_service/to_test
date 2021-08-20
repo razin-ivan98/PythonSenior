@@ -1,0 +1,7 @@
+
+kek = [1,2,3,5,8,9,6,879]
+
+for i in kek:
+  print (i)
+  
+print("ТЫ пес")

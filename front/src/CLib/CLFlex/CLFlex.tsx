@@ -10,7 +10,7 @@ const Wrapper = styled.div<Props>`
         margin: 0;
     }
     & > * {
-        ${({direction}) => direction === "column" ? "margin-bottom: 1em" : "margin-left: 1em"};
+        ${({direction}) => direction === "column" ? "margin-bottom: 1em" : "margin-right: 1em"};
     };
 `
 

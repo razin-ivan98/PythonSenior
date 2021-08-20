@@ -11,6 +11,8 @@ import {
 } from "react-router-dom"
 import { AppStore } from "../AppStore"
 import { PSCodeEditor } from "../components/PSCodeEditor/PSCodeEditor"
+import { PSConsole } from "../components/PSCodeEditor/PSConsole"
+
 import { PSSignIn } from "../components/PSSignIn"
 import { PSSignUp } from "../components/PSSignUp"
 
@@ -38,7 +40,12 @@ class PSApp extends React.Component<{}, {}> {
                     {this.appStore.me ? <Redirect to="/"/> : <PSSignUp store={this.appStore} />}
                 </Route>
                 <Route path="/">
-                    {this.appStore.me ? <PSCodeEditor /> : <Redirect to="./sign_in"/>}
+                    {this.appStore.me ?
+                    <>
+                        <PSCodeEditor />
+                    </>
+
+                    : <Redirect to="./sign_in"/>}
                 </Route>
                 <Route path="/not_approved">
                     Index
