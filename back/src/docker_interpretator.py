@@ -1,6 +1,7 @@
 import docker
 from io import BytesIO
 import json
+from threading import Timer
 
 client = docker.from_env()
 
@@ -13,12 +14,25 @@ def run(str):
     print("Docker initialized")
 
     res = client.containers.run("test", detach=True)
+
+    def stopContainer():
+        res.kill()
+    t = Timer(1, stopContainer)
+    t.start()
+
     status_code = res.wait()["StatusCode"]
+    t.cancel()
 
     if status_code == 0:
         return ({
             "status": "OK",
             "output": res.logs().decode("utf-8")
+        })
+    elif status_code == 137:
+        return ({
+            "status": "ERROR",
+            "output": "",
+            "error": {"text": "Stopped by timeout"}
         })
     else:
         lines = res.logs().decode("utf-8").split(sep="\n")
