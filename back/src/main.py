@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, render_template
 import pymysql
 pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
@@ -7,12 +7,19 @@ import hashlib
 import docker_interpretator
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", static_url_path='')
 app.config.from_object('config')
 
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:secret@localhost/python_senior_db'
 db = SQLAlchemy(app)
+
+@app.route("/sign_in", methods=["GET"])
+@app.route("/sign_up", methods=["GET"])
+@app.route("/admin", methods=["GET"])
+@app.route("/", methods=["GET"])
+def index():
+    return app.send_static_file("index.html")
 
 @app.route("/api/create_all", methods=["GET"])
 def create_all():
