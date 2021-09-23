@@ -67,7 +67,7 @@ kek("LOL")
             fontFamily: '"Dank Mono", "Fira Code", monospace',
             ...theme.plain,
             fontWeight: 100,
-            minHeight: "70vh",
+            minHeight: "70%",
             overflow: "visible"
         }
     }

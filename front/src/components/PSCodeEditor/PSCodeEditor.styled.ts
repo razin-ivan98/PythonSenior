@@ -7,7 +7,7 @@ interface ConsoleWrapperProps {
 
 export const MainContainer = styled.div`
   overflow: hidden;
-  height: 100vh;
+  height: 100%;
 `
 interface WrapperProps {
   showConsole?: boolean
@@ -15,14 +15,12 @@ interface WrapperProps {
 
 export const ConsoleWrapper = styled.div<ConsoleWrapperProps>`
   padding: 1em;
-  height: 30vh;
+  height: 30%;
   background-color: #1e1e1e;
   font-family: sans-serif;
   overflow: visible;
   border-top: 2px solid white;
   position: relative;
-  /* transform: ${({show}) => show ? "unset" : "translateY(30vh)"}; */
-  /* transition: ease 0.3s transform; */
 `;
 
 export const Wrapper = styled.div<WrapperProps>`
@@ -31,7 +29,7 @@ export const Wrapper = styled.div<WrapperProps>`
   background-color: #011627;
   padding-left: 30px;
   font-family: sans-serif;
-  height: ${({showConsole}) => showConsole ? "70vh" : "100vh"};
+  height: ${({showConsole}) => showConsole ? "70%" : "100%"};
   transition: ease 0.3s height;
 `;
 
