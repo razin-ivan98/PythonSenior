@@ -26,6 +26,17 @@ export const CLButton: React.FC<Props> = (props) => {
         iconRight
     } = props
 
+    if (!children && !iconRight) {
+        return <Wrapper 
+            variant={variant}
+            size={size}
+            width={width}
+            onClick={onClick}
+        >
+            <CLIcon type={iconLeft} variant={variant} size={size} />
+        </Wrapper>
+    }
+
     return <Wrapper 
         variant={variant}
         size={size}

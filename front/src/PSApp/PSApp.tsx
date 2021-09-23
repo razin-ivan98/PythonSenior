@@ -37,7 +37,7 @@ class PSApp extends React.Component<{}, {}> {
             return null
         
         return <React.Fragment>
-            <CLButton onClick={this.appStore.signOut}>Выйти</CLButton>
+            {/* <CLButton onClick={this.appStore.signOut}>Выйти</CLButton> */}
             <Router>
                 <Switch>
                     <Route path="/sign_in">
@@ -53,7 +53,7 @@ class PSApp extends React.Component<{}, {}> {
                         {this.appStore.me?.approved ? <Redirect to="./sign_in"/> : "NOT APPROVED"}
                     </Route>
                     <Route path="/">
-                        {this.appStore.me ? this.appStore.me.approved ? <PSCodeEditor /> : <Redirect to="./not_approved"/> : <Redirect to="./sign_in"/>}
+                        {this.appStore.me ? this.appStore.me.approved ? <PSCodeEditor store={this.appStore} /> : <Redirect to="./not_approved"/> : <Redirect to="./sign_in"/>}
                     </Route>
 
                 </Switch>

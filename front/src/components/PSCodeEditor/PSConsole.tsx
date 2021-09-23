@@ -44,16 +44,11 @@ export class PSConsole extends React.Component<Props> {
     )}
 
     render() {
-        return <>
-        {/* <ControlWrapper>
-          
-          <CLButton variant="success" onClick={this.props.submitCode}>Выполнить</CLButton>
-        </ControlWrapper> */}
-        
-        <ConsoleWrapper show={this.props.showConsole}>
-          <ConsoleLabel onClick={this.props.labelClick}>console</ConsoleLabel>
-          {this.highlight()}
-        </ConsoleWrapper>
+        return <> 
+            <ConsoleWrapper show={this.props.showConsole}>
+              <ConsoleLabel onClick={this.props.labelClick}>console</ConsoleLabel>
+              {this.highlight()}
+            </ConsoleWrapper>
         </>
     }
 }

@@ -6,20 +6,26 @@ import { observer } from "mobx-react";
 import { action, computed, observable } from "mobx";
 import { autobind } from "core-decorators";
 import { CLButton } from "../../CLib/CLButton/CLButton";
-import { Wrapper, Line, LineNo, LineContent, Pre, ErrorWrapper, MainContainer } from "./PSCodeEditor.styled"
+import { Wrapper, Line, LineNo, LineContent, Pre, ErrorWrapper, MainContainer, ButtonWrapper } from "./PSCodeEditor.styled"
 import { PSConsole } from "./PSConsole";
+import { CLFlex } from "../../CLib/CLFlex/CLFlex";
+import { AppStore } from "../../AppStore";
 
 export interface Error {
     line: number
     text: string
 }
 
+interface Props {
+    store: AppStore
+}
+
 @observer
 @autobind
-export class PSCodeEditor extends React.Component {
+export class PSCodeEditor extends React.Component<Props> {
 
     @observable
-    private showConsole: boolean = true
+    private showConsole: boolean = false
     @action
     private setShowConsole(value: boolean) {
         this.showConsole = value
@@ -82,6 +88,7 @@ kek("LOL")
             } else {
                 this.setError(null)
             }
+            this.setShowConsole(true)
             console.log(json);
         } else {
             const json = await response.json();
@@ -119,6 +126,15 @@ kek("LOL")
     render() {
         return <MainContainer>
             <Wrapper showConsole={this.showConsole}>
+                <ButtonWrapper>
+                    <CLFlex width="full" direction="column" justify="between">
+                        <CLFlex direction="column" margin="small" width="auto">
+                            <CLButton iconLeft="play" variant="success" onClick={this.submitCode} />
+                            <CLButton iconLeft="delete" variant="primary" onClick={() => {this.setError(null); this.setOutput("")}} />
+                        </CLFlex>
+                        <CLButton iconLeft="signOut" variant="danger" onClick={this.props.store.signOut} />
+                    </CLFlex>
+                </ButtonWrapper>
                 <Editor
                     insertSpaces
                     tabSize={2}

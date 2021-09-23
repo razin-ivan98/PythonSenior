@@ -25,17 +25,6 @@ export const ConsoleWrapper = styled.div<ConsoleWrapperProps>`
   /* transition: ease 0.3s transform; */
 `;
 
-// export const ControlWrapper = styled.div`
-//   padding: 1em 1em 0 1em;
-//   height: 70px;
-//   background-color: #1e1e1e;
-//   font-family: sans-serif;
-//   position: relative;
-//   overflow: visible;
-//   border-top: 2px solid white;
-
-// `;
-
 export const Wrapper = styled.div<WrapperProps>`
   position: relative;
   box-sizing: border-box;
@@ -73,7 +62,7 @@ export const LineNo = styled.div`
 export const ErrorWrapper = styled.div`
   max-width: 300px;
   position: absolute;
-  right: 10px;
+  right: 60px;
   top: 27px;
   border: 1px solid red;
   border-radius: 5px;
@@ -82,6 +71,7 @@ export const ErrorWrapper = styled.div`
   overflow: visible;
   text-align: right;
   background-color: rgb(120, 0 ,0);
+  z-index: 700;
   &:before { 
     content: ''; 
     position: absolute; 
@@ -97,12 +87,14 @@ export const ErrorWrapper = styled.div`
 export const LineContent = styled.div`
 `;
 
-// export const ButtonWrapper = styled.div`
-//   width: fit-content;
-//   position: absolute;
-//   top: 1em;
-//   right: 1em;
-// `
+export const ButtonWrapper = styled.div`
+  width: fit-content;
+  position: absolute;
+  height: calc(100% - 2em);
+  top: 1em;
+  right: 1em;
+  z-index: 1000;
+`
 
 export const ConsoleErrorWrapper = styled.div`
   background-color: rgb(120, 0 ,0);

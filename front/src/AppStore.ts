@@ -1,7 +1,8 @@
+import { autobind } from "core-decorators";
 import { action, computed, observable } from "mobx";
 import { User } from "./types";
 
-
+@autobind
 export class AppStore {
     @observable.ref
     private $me: User
