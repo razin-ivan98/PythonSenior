@@ -12,17 +12,21 @@ const Wrapper = styled.span<Props>`
     color: gray;
     font-family: Arial;
     font-size: ${({size}) => textSizes[size].fontSize};
+    text-align: ${({align}) => align};
 `
 
 interface Props {
     size?: Size
+    align?: "left" | "right" | "center" | "justify"
 }
-
 
 export class CLText extends React.Component<Props> {
     render() {
-        const {size = "medium"} = this.props
+        const {
+            size = "medium",
+            align = "justify"
+        } = this.props
 
-        return <Wrapper size={size}>{this.props.children}</Wrapper>
+        return <Wrapper size={size} align={align}>{this.props.children}</Wrapper>
     }
 }

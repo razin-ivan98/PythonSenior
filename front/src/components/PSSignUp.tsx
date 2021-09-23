@@ -4,6 +4,7 @@ import { observer } from "mobx-react"
 import React from "react"
 import { CLButton } from "../CLib/CLButton/CLButton"
 import { CLCard, CLCardHeader } from "../CLib/CLCard/CLCard"
+import { CLAlert } from "../CLib/CLAlert/CLAlert"
 import { CLFlex } from "../CLib/CLFlex/CLFlex"
 import { CLInput } from "../CLib/CLInput/CLInput"
 import { PSPageCantainer } from "./PSPageContainer"
@@ -18,6 +19,12 @@ interface Props {
 @autobind
 @observer
 export class PSSignUp extends React.Component<Props, {}> {
+    @observable
+    private error: string = null
+    @action
+    private setError(value: string) {
+        this.error = value
+    }
 
     @observable
     private login: string
@@ -47,15 +54,18 @@ export class PSSignUp extends React.Component<Props, {}> {
         this.verificationCode = code
     }
 
-    private signUp() {
-        console.log("SIGN UP");
+    private async signUp() {
+        this.setError(null)
         
-        void this.props.store.signUp(
+        const res = await this.props.store.signUp(
             this.login,
             this.passwd,
             this.repeatPasswd,
             this.verificationCode
         )
+        if (res) {
+            this.setError(res.errors[0])
+        }
     }
 
     render() {        
@@ -91,6 +101,7 @@ export class PSSignUp extends React.Component<Props, {}> {
                         placeholder="Введите код подтверждения"
                         value={this.verificationCode}
                     />
+                    {this.error && <CLAlert>{this.error}</CLAlert>}
                     <CLButton variant="success" size="medium" onClick={this.signUp}>Зарегистрироваться</CLButton>
                     <Link to="/sign_in">
                         <CLButton width="full" variant="primary" size="medium">

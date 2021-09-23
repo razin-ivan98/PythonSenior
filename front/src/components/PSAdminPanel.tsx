@@ -5,11 +5,7 @@ import React from "react"
 import { CLButton } from "../CLib/CLButton/CLButton"
 import { CLCard, CLCardHeader } from "../CLib/CLCard/CLCard"
 import { CLFlex, CLFlexItem } from "../CLib/CLFlex/CLFlex"
-import { CLInput } from "../CLib/CLInput/CLInput"
 import { PSPageCantainer } from "./PSPageContainer"
-import { Link } from "react-router-dom"
-import { CLText } from "../CLib/CLText/CLText"
-import { AppStore } from "../AppStore"
 import { PSLogo } from "./PSLogo"
 import { User } from "../types"
 
@@ -38,7 +34,6 @@ export class PSAdminPanel extends React.Component<{}, {}> {
     
             this.setUsers(json)
         } else {
-            alert("Ошибка HTTP: " + response.status);
         }
     }
 
@@ -59,7 +54,6 @@ export class PSAdminPanel extends React.Component<{}, {}> {
                 approved: user.id === userToChange.id ? !userToChange.approved : user.approved
             })))
         } else {
-            alert("Ошибка HTTP: " + response.status);
         }
     }
 

@@ -7,7 +7,6 @@ const ImgWrapper = styled.img`
     margin: 0 auto 2em;
 `
 
-
 export const PSLogo: React.FC = () => {
     return  <ImgWrapper src={String(logo)} />
 }

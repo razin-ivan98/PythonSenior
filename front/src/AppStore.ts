@@ -25,7 +25,6 @@ export class AppStore {
         } else {
             const json = await response.json();
             this.setMe(null)
-            alert("Ошибка HTTP: " + response.status);
         }
     }
 
@@ -41,12 +40,11 @@ export class AppStore {
             const json = await response.json();
             this.setMe(json)
             console.log(this.me);
-
         } else {
-            const json = await response.json();
-            alert("Ошибка HTTP: " + response.status);
-            console.log(json);
+            const json = await response.json()
+            return json
         }
+        return null
     }
 
     public async signOut() {
@@ -81,9 +79,9 @@ export class AppStore {
             this.setMe(json)
         } else {
             const json = await response.json();
-            alert("Ошибка HTTP: " + response.status);
-            console.log(json);
+            return json
         }
+        return null
     }
 
     @computed

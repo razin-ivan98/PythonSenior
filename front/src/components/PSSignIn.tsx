@@ -8,9 +8,9 @@ import { CLFlex } from "../CLib/CLFlex/CLFlex"
 import { CLInput } from "../CLib/CLInput/CLInput"
 import { PSPageCantainer } from "./PSPageContainer"
 import { Link } from "react-router-dom"
-import { CLText } from "../CLib/CLText/CLText"
 import { AppStore } from "../AppStore"
 import { PSLogo } from "./PSLogo"
+import { CLAlert } from "../CLib/CLAlert/CLAlert"
 
 interface Props {
     store: AppStore
@@ -19,6 +19,13 @@ interface Props {
 @autobind
 @observer
 export class PSSignIn extends React.Component<Props, {}> {
+    @observable
+    private error: string = null
+    @action
+    private setError(value: string) {
+        this.error = value
+    }
+
     @observable
     private login: string
     @action
@@ -33,8 +40,13 @@ export class PSSignIn extends React.Component<Props, {}> {
         this.passwd = passwd
     }
 
-    private submit() {
-        void this.props.store.signIn(this.login, this.passwd)
+    private async submit() {
+        this.setError(null)
+        const res = await this.props.store.signIn(this.login, this.passwd)
+
+        if (res) {            
+            this.setError(res.errors[0])
+        }
     }
 
     render() {
@@ -56,6 +68,7 @@ export class PSSignIn extends React.Component<Props, {}> {
                         placeholder="Password"
                         value={this.passwd}
                     />
+                    {this.error && <CLAlert>{this.error}</CLAlert>}
                     <CLButton variant="success" size="medium" onClick={this.submit}>
                         Sign In
                     </CLButton>

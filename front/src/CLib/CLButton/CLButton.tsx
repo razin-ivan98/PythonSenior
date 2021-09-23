@@ -2,7 +2,7 @@ import * as React from "react"
 import { CLFlex, CLFlexItem } from "../CLFlex/CLFlex"
 import { CLIcon, CLIconType } from "../CLIcon/CLIcon"
 
-import {ColorVariant, Size} from "../consts"
+import { ColorVariant, Size } from "../consts"
 import { Wrapper } from "./CLButton.styled"
 
 interface Props {
