@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
 export const AppWrapper = styled.div`
-    height: ${() => window.innerHeight};
+    height: ${() => window.innerHeight}px;
+    overflow: hidden;
 `
