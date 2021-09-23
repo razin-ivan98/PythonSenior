@@ -14,6 +14,7 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:secret@localhost/python_senior_db'
 db = SQLAlchemy(app)
 
+@app.route("/not_approved", methods=["GET"])
 @app.route("/sign_in", methods=["GET"])
 @app.route("/sign_up", methods=["GET"])
 @app.route("/admin", methods=["GET"])
@@ -157,5 +158,5 @@ class User(db.Model):
             "verificationCode": self.verification_code
         }
 
-app.run(debug=True, host="0.0.0.0")
+
     
