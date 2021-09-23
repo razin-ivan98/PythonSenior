@@ -23,6 +23,7 @@ export class AppStore {
             
         } else {
             const json = await response.json();
+            this.setMe(null)
             alert("Ошибка HTTP: " + response.status);
         }
     }
@@ -47,13 +48,32 @@ export class AppStore {
         }
     }
 
-    public async signUp(login: string, passwd: string, repeatPasswd: string) {
+    public async signOut() {
+        const response = await fetch("/api/sign_out", {
+            method: "GET",
+        })
+        if (response.ok) {
+            this.setMe(null)
+        }
+    }
+
+    public async signUp(
+        login: string,
+        passwd: string,
+        repeatPasswd: string,
+        verificationCode: string
+    ) {
         const response = await fetch("/api/sign_up", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({login, passwd, repeatPasswd})
+            body: JSON.stringify({
+                login,
+                passwd,
+                repeatPasswd,
+                verificationCode
+            })
         })
         if (response.ok) {
             const json = await response.json();

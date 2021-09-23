@@ -16,18 +16,34 @@ db = SQLAlchemy(app)
 
 @app.route("/api/create_all", methods=["GET"])
 def create_all():
-    db.create_all()
+    return jsonify({}), 200
+
+@app.route("/api/admin/approve_user", methods=["GET"])
+def approve_user():
+    name = request.args.get('name')
+    User.query.filter_by(name=name).update(dict(approved=True))
+    db.session.commit()
+    return jsonify({}), 200
+
+@app.route("/api/admin/ban_user", methods=["GET"])
+def ban_user():
+    name = request.args.get('name')
+    User.query.filter_by(name=name).update(dict(approved=False))
+    db.session.commit()
+    return jsonify({}), 200
 
 @app.route("/api/get_me", methods=["GET"])
 def api_get_me():
     if "user" in session:
         user = User.query.filter_by(name=session["user"]).first()
-        return jsonify({
-            "name": user.name,
-            "role": user.role,
-            "id": user.id
-        }), 200
+        return jsonify(user.obj()), 200
     return jsonify({"errors": ["Not authorized"]}), 401
+
+@app.route("/api/sign_out", methods=["GET"])
+def api_sign_out():
+    del session["user"]
+    del session["isAdmin"]
+    return jsonify({}), 200
 
 @app.route("/api/sign_up", methods=["POST"])
 def api_sign_up():
@@ -35,6 +51,7 @@ def api_sign_up():
     login = data["login"]
     passwd = data["passwd"]
     repeatPasswd = data["repeatPasswd"]
+    verificationCode = data["verificationCode"]
 
     response = {}
     if len(passwd) < 6:
@@ -54,16 +71,17 @@ def api_sign_up():
     user = User(
         name=login,
         role="user",
-        passwd=hashlib.sha256(passwd.encode('utf-8')).hexdigest()
+        passwd=hashlib.sha256(passwd.encode('utf-8')).hexdigest(),
+        verification_code=verificationCode,
+        approved=False
     )
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({
-        "name": user.name,
-        "role": user.role,
-        "id": user.id
-    }), 200
+    session["user"] = user.name
+    session["isAdmin"] = user.role == "admin"
+
+    return jsonify(user.obj()), 200
 
 @app.route("/api/sign_in", methods=["POST"])
 def api_sign_in():
@@ -85,12 +103,9 @@ def api_sign_in():
         return jsonify(response), 401
 
     session["user"] = user.name
+    session["isAdmin"] = user.role == "admin"
 
-    return jsonify({
-        "name": user.name,
-        "role": user.role,
-        "id": user.id
-    }), 200
+    return jsonify(user.obj()), 200
 
 @app.route("/api/code", methods=["POST"])
 def code():
@@ -104,15 +119,36 @@ def code():
 
     return jsonify(res), 200
 
+@app.route("/api/admin/get_users", methods=["GET"])
+def admin_get_users():
+    if not "user" in session or not session["isAdmin"]:
+        return jsonify({"errors": ["Permission denied"]}), 401
+
+    users = User.query.filter(User.role == "user").all()
+    users = list(map(lambda item: item.obj(), users))
+
+    return jsonify(users), 200
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     passwd = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(32), nullable=False)
+    approved = db.Column(db.Boolean, nullable=False)
+    verification_code = db.Column(db.String(128), nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
 
-# app.run(debug=True, host="0.0.0.0")
+    def obj(self):
+        return {
+            "name": self.name,
+            "role": self.role,
+            "id": self.id,
+            "approved": self.approved,
+            "verificationCode": self.verification_code
+        }
+
+app.run(debug=True, host="0.0.0.0")
     

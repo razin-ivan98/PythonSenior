@@ -16,6 +16,10 @@ import { PSConsole } from "../components/PSCodeEditor/PSConsole"
 import { PSSignIn } from "../components/PSSignIn"
 import { PSSignUp } from "../components/PSSignUp"
 
+import { PSAdminPanel } from "../components/PSAdminPanel"
+import { CLButton } from "../CLib/CLButton/CLButton"
+
+
 export function mountApp() {
     render(<PSApp />, document.getElementById("root"))
 }
@@ -29,29 +33,32 @@ class PSApp extends React.Component<{}, {}> {
     }
  
     render() {
-        console.log(this.appStore.me);
+        if (this.appStore.me === undefined)
+            return null
         
-        return <Router>
-            <Switch>
-                <Route path="/sign_in">
-                    {this.appStore.me ? <Redirect to="/"/> : <PSSignIn store={this.appStore} />}
-                </Route>
-                <Route path="/sign_up">
-                    {this.appStore.me ? <Redirect to="/"/> : <PSSignUp store={this.appStore} />}
-                </Route>
-                <Route path="/">
-                    {this.appStore.me ?
-                    <>
-                        <PSCodeEditor />
-                    </>
+        return <React.Fragment>
+            <CLButton onClick={this.appStore.signOut}>Выйти</CLButton>
+            <Router>
+                <Switch>
+                    <Route path="/sign_in">
+                        {this.appStore.me ? <Redirect to="/"/> : <PSSignIn store={this.appStore} />}
+                    </Route>
+                    <Route path="/sign_up">
+                        {this.appStore.me ? <Redirect to="/"/> : <PSSignUp store={this.appStore} />}
+                    </Route>
+                    <Route path="/admin">
+                        {this.appStore.me ? <PSAdminPanel /> : <Redirect to="./sign_in"/>}
+                    </Route>
+                    <Route path="/not_approved">
+                        {this.appStore.me?.approved ? <Redirect to="./sign_in"/> : "NOT APPROVED"}
+                    </Route>
+                    <Route path="/">
+                        {this.appStore.me ? this.appStore.me.approved ? <PSCodeEditor /> : <Redirect to="./not_approved"/> : <Redirect to="./sign_in"/>}
+                    </Route>
 
-                    : <Redirect to="./sign_in"/>}
-                </Route>
-                <Route path="/not_approved">
-                    Index
-                </Route>
-            </Switch>
-        </Router>
+                </Switch>
+            </Router>
+        </React.Fragment>
     }
     
     

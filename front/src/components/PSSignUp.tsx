@@ -40,10 +40,22 @@ export class PSSignUp extends React.Component<Props, {}> {
         this.repeatPasswd = repeatPasswd
     }
 
+    @observable
+    private verificationCode: string
+    @action
+    private setVerificationCode(code: string) {
+        this.verificationCode = code
+    }
+
     private signUp() {
         console.log("SIGN UP");
         
-        void this.props.store.signUp(this.login, this.passwd, this.repeatPasswd)
+        void this.props.store.signUp(
+            this.login,
+            this.passwd,
+            this.repeatPasswd,
+            this.verificationCode
+        )
     }
 
     render() {        
@@ -55,27 +67,34 @@ export class PSSignUp extends React.Component<Props, {}> {
                     <CLInput
                         size="medium"
                         onChange={this.setLogin}
-                        placeholder="Login"
+                        placeholder="Придумайте логин"
                         value={this.login}
                     />
                     <CLInput
                         type="password"
                         size="medium"
                         onChange={this.setPasswd}
-                        placeholder="Password"
+                        placeholder="Придумайте пароль"
                         value={this.passwd}
                     />
                     <CLInput
                         type="password"
                         size="medium"
                         onChange={this.setRepeatPasswd}
-                        placeholder="Repeat password"
+                        placeholder="Повторите пароль"
                         value={this.repeatPasswd}
                     />
-                    <CLButton variant="success" size="medium" onClick={this.signUp}>Register</CLButton>
+                    <CLInput
+                        type="text"
+                        size="medium"
+                        onChange={this.setVerificationCode}
+                        placeholder="Введите код подтверждения"
+                        value={this.verificationCode}
+                    />
+                    <CLButton variant="success" size="medium" onClick={this.signUp}>Зарегистрироваться</CLButton>
                     <Link to="/sign_in">
                         <CLButton width="full" variant="primary" size="medium">
-                            Sign In
+                            У меня уже есть аккаунт
                         </CLButton>
                     </Link>
                 </CLFlex>
