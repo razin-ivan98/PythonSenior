@@ -71,7 +71,7 @@ export class PSSignUp extends React.Component<Props, {}> {
     render() {        
         return <PSPageCantainer>
             <PSLogo />
-            <CLCard width={400}>
+            <CLCard>
                 <CLCardHeader>Регистрация</CLCardHeader>
                 <CLFlex direction="column">
                     <CLInput

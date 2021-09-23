@@ -52,7 +52,7 @@ export class PSSignIn extends React.Component<Props, {}> {
     render() {
         return <PSPageCantainer>
             <PSLogo />
-            <CLCard width={400}>
+            <CLCard>
                 <CLCardHeader>Авторизуйтесь в системе</CLCardHeader>
                 <CLFlex direction="column">
                     <CLInput

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react"
-import React, { } from "react"
+import React from "react"
 import { render } from "react-dom"
 import {
     BrowserRouter as Router,
@@ -15,7 +15,7 @@ import { PSSignIn } from "../components/PSSignIn"
 import { PSSignUp } from "../components/PSSignUp"
 
 import { PSAdminPanel } from "../components/PSAdminPanel"
-
+import { AppWrapper } from "./PSApp.styled"
 
 export function mountApp() {
     render(<PSApp />, document.getElementById("root"))
@@ -33,8 +33,7 @@ class PSApp extends React.Component<{}, {}> {
         if (this.appStore.me === undefined)
             return null
         
-        return <React.Fragment>
-            {/* <CLButton onClick={this.appStore.signOut}>Выйти</CLButton> */}
+        return <AppWrapper>
             <Router>
                 <Switch>
                     <Route path="/sign_in">
@@ -55,10 +54,6 @@ class PSApp extends React.Component<{}, {}> {
 
                 </Switch>
             </Router>
-        </React.Fragment>
+        </AppWrapper>
     }
-    
-    
-    
-    // <CLCodeEditor />
 }
